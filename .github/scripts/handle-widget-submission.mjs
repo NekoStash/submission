@@ -1,4 +1,18 @@
 const ALLOWED_TYPES = new Set(['card', 'enhanced', 'notification']);
+const MANAGED_LABELS = {
+  approved: {
+    color: '1d76db',
+    description: 'Submission approved by administrators',
+  },
+  invalid: {
+    color: 'd1242f',
+    description: 'Submission failed automated validation',
+  },
+  review: {
+    color: 'fbca04',
+    description: 'Submission passed validation and is waiting for review',
+  },
+};
 
 function normalizeBody(body = '') {
   return body.replace(/\r\n/g, '\n');
@@ -188,6 +202,78 @@ async function leaveComment(github, sourceRepo, issueNumber, body) {
   });
 }
 
+async function ensureLabel(github, sourceRepo, name, config) {
+  try {
+    await github.rest.issues.getLabel({
+      owner: sourceRepo.owner,
+      repo: sourceRepo.repo,
+      name,
+    });
+  } catch (error) {
+    if (error.status !== 404) {
+      throw error;
+    }
+
+    try {
+      await github.rest.issues.createLabel({
+        owner: sourceRepo.owner,
+        repo: sourceRepo.repo,
+        name,
+        color: config.color,
+        description: config.description,
+      });
+    } catch (createError) {
+      if (createError.status !== 422) {
+        throw createError;
+      }
+    }
+  }
+}
+
+async function ensureManagedLabels(github, sourceRepo) {
+  for (const [name, config] of Object.entries(MANAGED_LABELS)) {
+    await ensureLabel(github, sourceRepo, name, config);
+  }
+}
+
+async function addLabels(github, sourceRepo, issueNumber, labels) {
+  if (labels.length === 0) {
+    return;
+  }
+
+  await github.rest.issues.addLabels({
+    owner: sourceRepo.owner,
+    repo: sourceRepo.repo,
+    issue_number: issueNumber,
+    labels,
+  });
+}
+
+async function removeLabelIfPresent(github, sourceRepo, issueNumber, name) {
+  try {
+    await github.rest.issues.removeLabel({
+      owner: sourceRepo.owner,
+      repo: sourceRepo.repo,
+      issue_number: issueNumber,
+      name,
+    });
+  } catch (error) {
+    if (error.status !== 404) {
+      throw error;
+    }
+  }
+}
+
+async function markInvalid(github, sourceRepo, issueNumber) {
+  await addLabels(github, sourceRepo, issueNumber, ['invalid']);
+  await removeLabelIfPresent(github, sourceRepo, issueNumber, 'review');
+}
+
+async function markForReview(github, sourceRepo, issueNumber) {
+  await addLabels(github, sourceRepo, issueNumber, ['review']);
+  await removeLabelIfPresent(github, sourceRepo, issueNumber, 'invalid');
+}
+
 async function leaveCommentIfPossible(github, sourceRepo, issueNumber, body) {
   try {
     await leaveComment(github, sourceRepo, issueNumber, body);
@@ -234,6 +320,7 @@ async function closeAsInvalid(github, sourceRepo, issue, errors, extraLine = '')
 
   lines.push('', '请修正后重新创建新的 Issue。');
 
+  await markInvalid(github, sourceRepo, issue.number);
   await leaveCommentIfPossible(github, sourceRepo, issue.number, lines.join('\n'));
   await closeIssue(github, sourceRepo, issue.number, 'not_planned');
 }
@@ -314,6 +401,8 @@ export async function run({ github, context, core }) {
     throw new Error('Missing GitHub App installation token for the target repository.');
   }
 
+  await ensureManagedLabels(github, sourceRepo);
+
   if (action === 'labeled' && context.payload.label?.name !== 'approved') {
     core.info('Ignoring non-approved label event.');
     return;
@@ -334,6 +423,7 @@ export async function run({ github, context, core }) {
   }
 
   if (action === 'opened') {
+    await markForReview(github, sourceRepo, issue.number);
     await leaveComment(
       github,
       sourceRepo,
@@ -351,6 +441,7 @@ export async function run({ github, context, core }) {
   }
 
   if (action === 'reopened') {
+    await markForReview(github, sourceRepo, issue.number);
     await leaveComment(
       github,
       sourceRepo,

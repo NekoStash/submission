@@ -1,0 +1,40 @@
+name: Widget Deletion
+description: Admin-only widget deletion request 管理员专用组件删除请求
+title: "[Widget Deletion] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Admin-only widget deletion form
+
+        This form is only for repository administrators to remove an existing widget record from `NekoStash/widgets-repo`.
+
+        Non-admin requests will be automatically closed.
+
+        ## 管理员专用组件删除表单
+
+        此表单仅供仓库管理员删除 `NekoStash/widgets-repo` 中已存在的组件记录。
+
+        非管理员提交会被自动关闭。
+  - type: input
+    id: widget_id
+    attributes:
+      label: Widget ID
+      description: |
+        Existing widget ID to remove.
+
+        需要删除的现有组件 ID
+      placeholder: example_widget
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: Reason
+      description: |
+        Optional internal reason for deletion.
+
+        可选，填写删除原因
+      placeholder: no longer maintained
+    validations:
+      required: false

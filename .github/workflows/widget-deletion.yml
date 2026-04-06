@@ -1,19 +1,18 @@
-name: Widget Submission
+name: Widget Deletion
 
 on:
   issues:
     types:
       - opened
       - reopened
-      - labeled
 
 permissions:
   contents: read
   issues: write
 
 jobs:
-  handle-submission:
-    if: ${{ github.event.issue.pull_request == null && startsWith(github.event.issue.title, '[Widget Submission]') }}
+  handle-deletion:
+    if: ${{ github.event.issue.pull_request == null && startsWith(github.event.issue.title, '[Widget Deletion]') }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -28,7 +27,7 @@ jobs:
           owner: NekoStash
           repositories: widgets-repo
 
-      - name: Process widget submission
+      - name: Process widget deletion
         uses: actions/github-script@v7
         env:
           TARGET_REPO_OWNER: NekoStash
@@ -39,7 +38,7 @@ jobs:
           script: |
             const { pathToFileURL } = require('node:url');
 
-            const scriptUrl = pathToFileURL(`${process.env.GITHUB_WORKSPACE}/.github/scripts/handle-widget-submission.mjs`).href;
+            const scriptUrl = pathToFileURL(`${process.env.GITHUB_WORKSPACE}/.github/scripts/handle-widget-deletion.mjs`).href;
             const { run } = await import(scriptUrl);
 
             await run({ github, context, core });
