@@ -1,0 +1,60 @@
+name: Widget Submission
+description: Submit a new widget 提交一个新的组件
+title: "[Widget Submission] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Use this form to submit your widget information
+
+        ### Before submitting, please make sure:
+        - The repository URL must be the root of the GitHub repository, e.g., `https://github.com/owner/repo`
+        - The root directory of the submitted repository must contain `widget_info.json`
+        - The `Widget ID` must be unique and can only contain lowercase letters, numbers, `-`, `_`
+
+        Issues that do not meet the requirements will be automatically closed; please correct and create a new Issue.
+
+        ## 使用这个表单提交组件信息
+
+        ### 提交前请确认：
+        - 仓库地址必须是 GitHub 仓库根地址，例如 `https://github.com/owner/repo`
+        - 提交仓库根目录必须存在 `widget_info.json`
+        - `Widget ID` 必须唯一，且只能使用小写英文字母、数字、`-`、`_`
+
+        不符合要求的 Issue 会被自动关闭；请修正后重新创建新的 Issue
+  - type: input
+    id: widget_id
+    attributes:
+      label: Widget ID
+      description: |
+        Widget unique ID. Only lowercase letters, numbers, `-`, `_` are allowed
+
+        组件唯一 ID。仅允许小写英文字母、数字、`-`、`_`
+      placeholder: example_widget
+    validations:
+      required: true
+  - type: input
+    id: repository_url
+    attributes:
+      label: Repository URL
+      description: |
+        Widget GitHub repository URL. Must be the root of the repository.
+
+        组件 GitHub 仓库地址，必须是仓库根地址
+      placeholder: https://github.com/owner/repository
+    validations:
+      required: true
+  - type: dropdown
+    id: widget_type
+    attributes:
+      label: Widget Type
+      description: |
+        Widget type. Only `card`, `enhanced`, or `notification` are allowed.
+
+        只允许选择 `card`（卡片）、`enhanced`（增强）、`notification`（通知）
+      options:
+        - card
+        - enhanced
+        - notification
+    validations:
+      required: true
