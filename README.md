@@ -39,7 +39,7 @@
 在提交时，您需要填写：
 
 * **组件名称**：请勿去掉前面的 `[Widget Submission]`
-* **Widget ID**：组件唯一 ID，需与 JSON 中的 `id` 一致。仅允许小写英文字母、数字、`-`、`_`
+* **Widget ID**：组件唯一 ID，仅允许小写英文字母、数字、`-`、`_`
 * **Repository URL**：组件 GitHub 仓库地址，必须是仓库根地址
 * **Widget Type**：卡片类型，分为 `card`（卡片）、`enhanced`（增强）、`notification`（通知）
     * `card` 为普通卡片
