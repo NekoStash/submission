@@ -1,7 +1,7 @@
 # REARStore Submission
 
 ![icon](./icons/cozy_vector.svg)
-![icon2](![icon](./icons/compact_vector.svg))
+![icon2](./icons/compact_vector.svg)
 
 这里是REAREye的官方组件仓库。
 
