@@ -1,5 +1,8 @@
 # REARStore Submission
 
+![icon](https://github.com/NekoStash/submission/icons/cozy_vector.svg)
+![icon2](![icon](https://github.com/NekoStash/submission/icons/compact_vector.svg))
+
 这里是REAREye的官方组件仓库。
 
 ## 组件仓库提交
