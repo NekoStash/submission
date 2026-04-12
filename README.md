@@ -18,3 +18,5 @@
   }
 }
 ```
+
+`wallpaper` refers to a wallpaper-type widget, i.e. 壁纸类型。

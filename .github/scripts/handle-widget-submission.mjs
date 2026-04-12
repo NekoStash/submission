@@ -1,4 +1,4 @@
-const ALLOWED_TYPES = new Set(['card', 'enhanced', 'notification']);
+const ALLOWED_TYPES = new Set(['card', 'enhanced', 'notification', 'wallpaper']);
 const MANAGED_LABELS = {
   approved: {
     color: '1d76db',
@@ -150,7 +150,7 @@ async function validateSubmission({ github, issue, sourceRepo, targetRepo, targe
   }
 
   if (!ALLOWED_TYPES.has(submission.widgetType)) {
-    errors.push('`Widget Type` 只能是 `card`、`enhanced` 或 `notification`。');
+    errors.push('`Widget Type` 只能是 `card`、`enhanced`、`notification` 或 `wallpaper`。');
   }
 
   if (errors.length > 0) {
