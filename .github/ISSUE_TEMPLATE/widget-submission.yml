@@ -49,12 +49,14 @@ body:
     attributes:
       label: Widget Type
       description: |
-        Widget type. Only `card`, `enhanced`, or `notification` are allowed.
+        Widget type. Only `card`, `enhanced`, `notification`, or `wallpaper` are allowed.
 
-        只允许选择 `card`（卡片）、`enhanced`（增强）、`notification`（通知）
+        只允许选择 `card`（卡片）、`enhanced`（增强）、`notification`（通知）、`wallpaper`（壁纸）
       options:
         - card
         - enhanced
         - notification
+        - wallpaper
+
     validations:
       required: true
