@@ -27,6 +27,17 @@
     "priority": 500,
     "sticky": true,
     "renameable": false
+  },
+  // Only available on type is notification
+  // 仅在类型为notification时可用 
+  "scene_setup": {
+    // Support regex prefix "re:" or "regex:"
+    // 支持正则规则前缀 "re:" 或 "regex:"
+    // Example: "re:.*", "re:CH:.*", "re:com.example.(.*)" or other else
+    "scene": "messageCenter",
+    // Also support regex rule
+    // 同样支持正则规则
+    "pkg": "com.example.app"
   }
 }
 ```
