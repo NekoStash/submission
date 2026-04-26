@@ -14,6 +14,12 @@
   // Support widget (default) or wallpaper
   // 支持 widget (默认) 和 wallpaper
   "type": "widget",
+  // Minimum REAREye version required to install this widget (Optional)
+  // 安装此组件所需要最低的REAREye版本 (可选)
+  "minVersion": 99,
+  // Maximum REAREye version supported by this widget (Optional)
+  // 此小部件支持的最高 REAREye 版本 (可选)
+  "maxVersion": 104,
   "name": "Example Widget",
   "business_setup": {
     "id": "example_widget",
