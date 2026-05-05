@@ -44,7 +44,85 @@
     // Also support regex rule
     // 同样支持正则规则
     "pkg": "com.example.app"
+  },
+  // Widget Requirements - Optional
+  // 组件安装条件 - 可选
+  "requirements": {
+    // Required Apps (List - Match all) - Optional
+    // 所需的App包名 (列表 - 匹配所有) - 可选
+    "packages": [
+      "com.Badnng.moe",
+      "org.nsh07.pomodoro"
+    ],
+    // Required Config State (See below for grammar details) - Optional
+    // 所需的配置状态 (语法查看下方内容) - 可选
+    "configs": {
+      "enable_allow_rear_focus_notices": true,
+      "lyric_display_mode": ">= 1",
+      "background_whitelist_apps": "== com.miHoYo.Nap"
+    }
+  },
+  // Execute after installing this widget - Optional
+  // 在此组件完成安装后执行 - 可选
+  "postinstall": {
+    // {id} - store id, {business} - business id, {card} - card id
+    "uri": "content://open.some.example.uri?store_id={id}"
   }
+}
+```
+
+### 配置状态 (Config State)
+- **读取的配置节点必须在模块的 `ConfigKeys` 中存在**
+- **Config key to read should be used on `ConfigKeys` file**
+
+#### 表达式 - Expression
+- `bool`
+  - 只支持 `==` / `!=`
+- `number`
+  - 支持 `==` / `!=` / `>` / `<` / `>=` / `<=`
+- `list / set`
+  - `==` 表示包含 (Contains)
+  - `!=` 表示不包含 (Not Contains)
+- `string`
+  - 只支持 `==` / `!=`
+
+### 内容读取
+- 提供ContentProvider `content://hk.uwu.reareye.archive.read`
+
+* **mode** 模式: `store_id`, `business_id`
+* **id** ID: 根据模式传入对应的ID, 如仓库ID或组件(Business)ID
+* **entry** 文件(可选): 需要读取的文件路径, 留空获取文件列表
+
+- 内容请读取Cursor: `json`
+
+#### 返回内容
+- 文件列表
+
+```json
+{
+  "success": true,
+  "error": null,
+  "entries": [
+    "a/b.json",
+    "c/d.png"
+  ],
+  "contentBase64": null
+}
+```
+
+- 读取内容
+
+```json
+{
+  "success": true,
+  "error": null,
+  "mode": "store_id",
+  "storeWidgetId": "demo_widget",
+  "businessConfigId": "demo_business",
+  "business": "demo_business",
+  "card": "demo_card",
+  "entry": "manifest.xml",
+  "contentBase64": "eyJzdWNjZXNzIjp0cnVlLCJlcnJvciI6bnVsbH0="
 }
 ```
 
